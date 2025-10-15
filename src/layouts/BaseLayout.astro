@@ -1,0 +1,26 @@
+---
+import "@styles/default.css"
+import Header from "@components/Header.astro"
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>
+			{title ?? ":)"}
+		</title>
+    </head>
+    <body>
+        <slot name="header"><Header /></slot>
+        <main>
+			<h1>{title ?? ":)"}</h1>
+			<slot />
+			<footer>
+				<p>Rendered at {new Date().toLocaleString()}</p>
+			</footer>
+        </main>
+    </body>
+</html>

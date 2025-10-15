@@ -1,0 +1,14 @@
+---
+const { posted, updated, author } = Astro.props;
+---
+
+<article>
+	{(posted || updated || author) && (
+		<section class="header">
+		{posted && <>Posted on {posted}</>}
+		{updated && <><br />Updated on {updated}</>}
+		{author && <><br />By {author}</>}
+		</section>
+	)}
+	<section><slot /></section>
+</article>
