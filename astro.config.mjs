@@ -1,5 +1,6 @@
 // @ts-check
 import {defineConfig} from 'astro/config';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 import path from 'node:path';
 
 // https://astro.build/config
@@ -15,5 +16,13 @@ export default defineConfig({
         '@scripts': path.resolve('./src/scripts'),
       },
     },
+    plugins: [
+      viteStaticCopy({
+        targets: [
+          // copy the ORT wasm files from the package into the build output
+          { src: 'node_modules/onnxruntime-web/dist/*.wasm', dest: 'ort' },
+        ],
+      }),
+    ],
   },
 });
