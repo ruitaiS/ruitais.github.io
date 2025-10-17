@@ -1,0 +1,13 @@
+---
+const { id, name, style, list } = Astro.props;
+// TODO: dropdown list is not the best way of handling this
+// should really be an input box with selections / suggestions
+// little wiggle if the text doesn't match what is acceptible
+---
+
+<select id={id} name={name} style={style}>
+	<option value="<">(None)</option>
+	<option value="<Genesis>">Genesis</option>
+	<option value="<Exodus>">Exodus</option>
+	<option value="<Leviticus>">Leviticus</option>
+</select>
