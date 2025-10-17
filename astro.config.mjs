@@ -19,7 +19,6 @@ export default defineConfig({
     plugins: [
       viteStaticCopy({
         targets: [
-          // copy the ORT wasm files from the package into the build output
           { src: 'node_modules/onnxruntime-web/dist/*.wasm', dest: 'ort' },
         ],
       }),
