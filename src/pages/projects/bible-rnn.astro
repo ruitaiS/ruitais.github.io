@@ -14,13 +14,14 @@ import Dropdown from "@components/Dropdown.astro"
 
     <div id="output" style="margin-top: 1rem; font-family: ui-monospace, Menlo, monospace;"></div>
 
-    <script type="module">
+    <script>
       const select = document.getElementById('prime');
       const button = document.getElementById('generate');
       const output = document.getElementById('output');
 
-      import { session } from "/src/scripts/ort_session"
-      //import { session } from "@scripts/ort_session.js"
+      //import { session } from "/src/scripts/ort_session"
+      import { ort } from "@scripts/ort_session.js"
+      //const session = await ort.InferenceSession.create('/bible-rnn/model.onnx');
       const model_assets = await fetch('/bible-rnn/model_assets.json').then(r => r.json());
       const idx2token = [...model_assets.specials, ...model_assets.chars]
       const token2idx = {}
