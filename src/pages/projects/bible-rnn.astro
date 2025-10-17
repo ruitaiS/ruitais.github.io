@@ -19,12 +19,7 @@ import Dropdown from "@components/Dropdown.astro"
       const button = document.getElementById('generate');
       const output = document.getElementById('output');
 
-      //import { ort } from '@scripts/ort'  // TODO; broken import
-      import { ort } from "/src/scripts/ort.js"
-      const session = await ort.InferenceSession.create('/bible-rnn/model.onnx', {
-        executionProviders: ['wasm'],          // force WASM
-        graphOptimizationLevel: 'all',
-      });
+      import { session } from "/src/scripts/ort_session"
       const model_assets = await fetch('/bible-rnn/model_assets.json').then(r => r.json());
       const idx2token = [...model_assets.specials, ...model_assets.chars]
       const token2idx = {}
