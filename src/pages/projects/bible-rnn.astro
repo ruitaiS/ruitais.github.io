@@ -7,16 +7,15 @@ import Dropdown from "@components/Dropdown.astro"
 <BaseLayout title="RNN Language Model">
   <Article>
     <div style="display: flex; gap: 0.5rem; align-items: center;">
-      <label for="prime" style="font-weight: bold;">Book:</label>
-      <Dropdown id="prime" name="prime" style="padding: 0.25rem 0.5rem;"></Dropdown>
+      <label for="selection" style="font-weight: bold;">Book:</label>
+      <Dropdown id="selection" style="padding: 0.25rem 0.5rem;"></Dropdown>
       <button id="generate" style="padding: 0.4rem 0.8rem;">Generate</button>
     </div>
 
     <div id="output" style="margin-top: 1rem; font-family: ui-monospace, Menlo, monospace;"></div>
 
     <script>
-      //import { session } from "@scripts/ort_session"
-      import { ort } from "@scripts/ort"
+      import { session } from "@scripts/ort_session"
       const model_assets = await fetch('/bible-rnn/model_assets.json').then(r => r.json());
       const idx2token = [...model_assets.specials, ...model_assets.chars]
       const token2idx = {}
@@ -24,7 +23,7 @@ import Dropdown from "@components/Dropdown.astro"
         token2idx[idx2token[i]] = i;
       }
 
-      const select = document.getElementById('prime');
+      const selection = document.getElementById('selection');
       const button = document.getElementById('generate');
       const output = document.getElementById('output');
 
@@ -33,12 +32,11 @@ import Dropdown from "@components/Dropdown.astro"
         console.log('Prime Chars:', prime);
         console.log({idx2token})
         console.log({token2idx})
-        //console.log(session)
+        console.log(session)
         output.textContent = `Prime Chars: ${prime}`;
       }
       button.addEventListener('click', () => {
-        const selected = select.value;
-        sample(selected);
+        sample(selection.value);
       });
     </script>
   </Article>
