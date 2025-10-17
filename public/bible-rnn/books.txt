@@ -37,7 +37,6 @@ Zephaniah
 Haggai
 Zechariah
 Malachi
---- New Testament
 Matthew
 Mark
 Luke
