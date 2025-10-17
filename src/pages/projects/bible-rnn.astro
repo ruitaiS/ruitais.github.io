@@ -15,13 +15,8 @@ import Dropdown from "@components/Dropdown.astro"
     <div id="output" style="margin-top: 1rem; font-family: ui-monospace, Menlo, monospace;"></div>
 
     <script>
-      const select = document.getElementById('prime');
-      const button = document.getElementById('generate');
-      const output = document.getElementById('output');
-
-      //import { session } from "/src/scripts/ort_session"
-      import { ort } from "@scripts/ort_session.js"
-      //const session = await ort.InferenceSession.create('/bible-rnn/model.onnx');
+      //import { session } from "@scripts/ort_session"
+      import { ort } from "@scripts/ort"
       const model_assets = await fetch('/bible-rnn/model_assets.json').then(r => r.json());
       const idx2token = [...model_assets.specials, ...model_assets.chars]
       const token2idx = {}
@@ -29,15 +24,18 @@ import Dropdown from "@components/Dropdown.astro"
         token2idx[idx2token[i]] = i;
       }
 
+      const select = document.getElementById('prime');
+      const button = document.getElementById('generate');
+      const output = document.getElementById('output');
+
       // Placeholder
       function sample(prime) {
         console.log('Prime Chars:', prime);
         console.log({idx2token})
         console.log({token2idx})
-        console.log(session)
+        //console.log(session)
         output.textContent = `Prime Chars: ${prime}`;
       }
-
       button.addEventListener('click', () => {
         const selected = select.value;
         sample(selected);
