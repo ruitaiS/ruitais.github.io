@@ -4,7 +4,7 @@ import Article from "@components/Article.astro"
 import Dropdown from "@components/Dropdown.astro"
 ---
 
-<BaseLayout title="Character Level RNN Model">
+<BaseLayout title="RNN Language Model">
   <Article>
     <div style="display: flex; gap: 0.5rem; align-items: center;">
       <label for="prime" style="font-weight: bold;">Book:</label>
@@ -19,9 +19,25 @@ import Dropdown from "@components/Dropdown.astro"
       const button = document.getElementById('generate');
       const output = document.getElementById('output');
 
+      //import { ort } from '@scripts/ort'  // TODO; broken import
+      import { ort } from "/src/scripts/ort.js"
+      const session = await ort.InferenceSession.create('/bible-rnn/model.onnx', {
+        executionProviders: ['wasm'],          // force WASM
+        graphOptimizationLevel: 'all',
+      });
+      const model_assets = await fetch('/bible-rnn/model_assets.json').then(r => r.json());
+      const idx2token = [...model_assets.specials, ...model_assets.chars]
+      const token2idx = {}
+      for (let i = 0; i < idx2token.length; i++) {
+        token2idx[idx2token[i]] = i;
+      }
+
       // Placeholder
       function sample(prime) {
         console.log('Prime Chars:', prime);
+        console.log({idx2token})
+        console.log({token2idx})
+        console.log(session)
         output.textContent = `Prime Chars: ${prime}`;
       }
 
