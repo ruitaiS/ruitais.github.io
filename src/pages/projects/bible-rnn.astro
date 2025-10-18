@@ -9,23 +9,27 @@ import Dropdown from "@components/Dropdown.astro"
     <div style="display: flex; gap: 0.5rem; align-items: center;">
       <label for="selection" style="font-weight: bold;">Book:</label>
       <Dropdown id="selection" style="padding: 0.25rem 0.5rem;"></Dropdown>
-      <button id="generate" style="padding: 0.4rem 0.8rem;">Generate</button>
+      <button id="generate" disabled style="padding: 0.4rem 0.8rem;">Loading..</button>
     </div>
 
     <div id="output" style="margin-top: 1rem; font-family: ui-monospace, Menlo, monospace;"></div>
 
     <script>
-      import { session } from "@scripts/ort_session"
+      //import { session } from "@scripts/ort_session"
+      import { getSession } from "@scripts/await_ort"
+      const selection = document.getElementById('selection');
+      const button = document.getElementById('generate');
+      const output = document.getElementById('output');
+
+      const session = await getSession
       const model_assets = await fetch('/bible-rnn/model_assets.json').then(r => r.json());
       const idx2token = [...model_assets.specials, ...model_assets.chars]
       const token2idx = {}
       for (let i = 0; i < idx2token.length; i++) {
         token2idx[idx2token[i]] = i;
       }
-
-      const selection = document.getElementById('selection');
-      const button = document.getElementById('generate');
-      const output = document.getElementById('output');
+      button.disabled = false
+      button.textContent="Generate"
 
       // Placeholder
       function sample(prime) {
