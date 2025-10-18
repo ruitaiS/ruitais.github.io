@@ -15,28 +15,28 @@ import Dropdown from "@components/Dropdown.astro"
     <div id="output" style="margin-top: 1rem; font-family: ui-monospace, Menlo, monospace;"></div>
 
     <script>
-      //import { session } from "@scripts/ort_session"
-      import { getSession } from "@scripts/await_ort"
+      import { initialize_ort } from "@scripts/ort_handler"
       const selection = document.getElementById('selection');
       const button = document.getElementById('generate');
       const output = document.getElementById('output');
 
-      const session = await getSession
+      const { ort, session } = await initialize_ort();
       const model_assets = await fetch('/bible-rnn/model_assets.json').then(r => r.json());
-      const idx2token = [...model_assets.specials, ...model_assets.chars]
-      const token2idx = {}
+      const idx2token = [...model_assets.specials, ...model_assets.chars];
+      const token2idx = {};
       for (let i = 0; i < idx2token.length; i++) {
         token2idx[idx2token[i]] = i;
       }
-      button.disabled = false
-      button.textContent="Generate"
+      button.disabled = false;
+      button.textContent="Generate";
 
       // Placeholder
       function sample(prime) {
         console.log('Prime Chars:', prime);
-        console.log({idx2token})
-        console.log({token2idx})
-        console.log(session)
+        console.log({idx2token});
+        console.log({token2idx});
+        console.log(session);
+        console.log(ort);
         output.textContent = `Prime Chars: ${prime}`;
       }
       button.addEventListener('click', () => {
