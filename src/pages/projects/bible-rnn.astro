@@ -30,15 +30,30 @@ import Dropdown from "@components/Dropdown.astro"
       button.disabled = false;
       button.textContent="Generate";
 
-      // Placeholder
+	  function init_hidden(){
+		  const h = new ort.Tensor(
+			  'float32',
+			  new Float32Array(model_assets.lstm_layers * model_assets.hidden_dim),
+			  [model_assets.lstm_layers, 1, model_assets.hidden_dim]);
+		  const c = new ort.Tensor(
+			  'float32',
+			  new Float32Array(model_assets.lstm_layers * model_assets.hidden_dim),
+			  [model_assets.lstm_layers, 1, model_assets.hidden_dim]);
+		  return { h, c }
+	  };
+
       function sample(prime) {
-        console.log('Prime Chars:', prime);
+		const priming_indices = Array.from(prime).map(char => token2idx[char]);
+		  const { h, c } = init_hidden();
+		  console.log({prime});
+		  console.log({priming_indices});
+		  console.log({ h, c });
         console.log({idx2token});
         console.log({token2idx});
         console.log(session);
         console.log(ort);
         output.textContent = `Prime Chars: ${prime}`;
-      }
+	  };
       button.addEventListener('click', () => {
         sample(selection.value);
       });
