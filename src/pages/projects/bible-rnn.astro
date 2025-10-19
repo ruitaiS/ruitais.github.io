@@ -30,7 +30,7 @@ import Dropdown from "@components/Dropdown.astro"
       button.disabled = false;
       button.textContent="Generate";
 
-	  function init_hidden(){
+	  async function prime_hidden(priming_indices){
 		  const h = new ort.Tensor(
 			  'float32',
 			  new Float32Array(model_assets.lstm_layers * model_assets.hidden_dim),
@@ -39,20 +39,45 @@ import Dropdown from "@components/Dropdown.astro"
 			  'float32',
 			  new Float32Array(model_assets.lstm_layers * model_assets.hidden_dim),
 			  [model_assets.lstm_layers, 1, model_assets.hidden_dim]);
-		  return { h, c }
+
+		  let token_idx = null;
+		  for (let i = 0; i < priming_indices.length; i++){
+			  // Prime the hidden state
+			  // final value of token_idx is our first response token
+			  token_idx = await next_token(priming_indices[i], h, c);
+		  }
+		  return { token_idx, h, c }
 	  };
 
-      function sample(prime) {
-		const priming_indices = Array.from(prime).map(char => token2idx[char]);
-		  const { h, c } = init_hidden();
-		  console.log({prime});
-		  console.log({priming_indices});
-		  console.log({ h, c });
-        console.log({idx2token});
-        console.log({token2idx});
-        console.log(session);
-        console.log(ort);
-        output.textContent = `Prime Chars: ${prime}`;
+	  async function next_token(token_idx, h, c){
+		  // TODO
+		  // Wrap onnx export so it is (token_idx, h, c) => (logits, new_h, new_c)
+		  // Update h, c in-place
+		  // Select and return next_idx from logits
+		  const next_idx = 5;
+		  return next_idx
+	  };
+
+      async function sample(prime) {
+		  const response_tokens = [];
+		  const priming_indices = Array.from(prime).map(char => token2idx[char]);
+		  let { token_idx, h, c } = await prime_hidden(priming_indices);
+		  while (idx2token[token_idx] != '\n' && response_tokens.length < 500){
+			  response_tokens.push(token_idx);
+			  token_idx = await next_token(token_idx, h, c);
+		  };
+		  const response = response_tokens.map(i => idx2token[i]).join('');
+		  console.log({response})
+		  output.textContent = `${response}`;
+
+		  //console.log({prime});
+		  //console.log({priming_indices});
+		  //console.log({ h, c });
+		  //console.log({idx2token});
+		  //console.log({token2idx});
+		  //console.log(session);
+		  //console.log(ort);
+		  //output.textContent = `Prime Chars: ${prime}`;
 	  };
       button.addEventListener('click', () => {
         sample(selection.value);

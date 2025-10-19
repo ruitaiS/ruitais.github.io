@@ -6,5 +6,5 @@ const books = booksRaw.split(/\r?\n/).filter(Boolean);
 
 <select id={id} name={name} style={style}>
 	<option value="<">(None)</option>
-	{books.map(book => <option value={`<${book}>`}>{book}</option>)}
+	{books.map(book => <option value={`<${book}>\t`}>{book}</option>)}
 </select>
