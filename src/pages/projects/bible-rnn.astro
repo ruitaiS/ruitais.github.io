@@ -85,6 +85,7 @@ import Dropdown from "@components/Dropdown.astro"
 		  while (idx2token[token_idx] != '\n' && response.length < 500){
 			  response = response + idx2token[token_idx];
 			  output.textContent = `${response}`;
+			  await new Promise(requestAnimationFrame); // TODO: worker + rAF; this is too slow
 			  token_idx = await next_token(token_idx, hidden);
 		  };		  
 	  };
