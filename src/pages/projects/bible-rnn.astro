@@ -15,22 +15,24 @@ import Dropdown from "@components/Dropdown.astro"
     <div id="output" style="margin-top: 1rem; font-family: ui-monospace, Menlo, monospace;"></div>
 
     <script>
-      import { initialize_ort } from "@scripts/ort_handler"
-      const selection = document.getElementById('selection');
-      const button = document.getElementById('generate');
-      const output = document.getElementById('output');
-
+      import { initialize_ort } from "@scripts/ort_handler";
       const { ort, session } = await initialize_ort();
+	  type Tensor = import('onnxruntime-web').Tensor;
+	  
+	  const selection = document.getElementById('selection')! as HTMLSelectElement;
+      const button = document.getElementById('generate')! as HTMLButtonElement;
+      const output = document.getElementById('output')! as HTMLElement;
+	  
       const model_assets = await fetch('/bible-rnn/model_assets.json').then(r => r.json());
       const idx2token = [...model_assets.specials, ...model_assets.chars];
-      const token2idx = {};
+      const token2idx: Record<string, number> = {};
       for (let i = 0; i < idx2token.length; i++) {
         token2idx[idx2token[i]] = i;
       }
       button.disabled = false;
       button.textContent="Generate";
 
-	  function multinomial(probs){
+	  function multinomial(probs: ArrayLike<number>){
 		  let acc = 0;
 		  const r = Math.random();
 		  for (let i = 0; i < probs.length; i++){
@@ -42,7 +44,7 @@ import Dropdown from "@components/Dropdown.astro"
 		  return token2idx['\n']; // End token as fallback
 	  };
 
-	  async function prime_hidden(priming_indices){
+	  async function prime_hidden(priming_indices: number[]){
 		  const h = new ort.Tensor(
 			  'float32',
 			  new Float32Array(model_assets.lstm_layers * model_assets.hidden_dim),
@@ -53,18 +55,17 @@ import Dropdown from "@components/Dropdown.astro"
 			  [model_assets.lstm_layers, 1, model_assets.hidden_dim]);
 
 		  const hidden = { "h": h, "c": c };
-
-		  let token_idx = null;
+		  let token_idx = token2idx['\n']; // Fallback
 		  for (let i = 0; i < priming_indices.length; i++){
 			  // Prime the hidden state
-			  // final value of token_idx is our first response token
+			  // Final value of token_idx is our first response token
 			  token_idx = await next_token(priming_indices[i], hidden);
 		  }
 		  return { token_idx, hidden }
 	  };
 
 	  const buf = new BigInt64Array(1);
-	  async function next_token(token_idx, hidden){
+	  async function next_token(token_idx: number, hidden: Record<string, Tensor>){
 		  buf[0] = BigInt(token_idx);
 		  const output = await session.run({
 			  "input_idx": new ort.Tensor('int64', buf, [1,1]),
@@ -73,19 +74,19 @@ import Dropdown from "@components/Dropdown.astro"
 		  });
 		  hidden.h = output['h'];
 		  hidden.c = output['c'];
-		  return multinomial(output['probs'].data);
+		  const probs = output['probs'].data as Float32Array;
+		  return multinomial(probs);
 	  };
 
-      async function sample(prime) {
-		  const response_tokens = [];
+      async function sample(prime: string) {
+		  let response = "";
 		  const priming_indices = Array.from(prime).map(char => token2idx[char]);
 		  let { token_idx, hidden } = await prime_hidden(priming_indices);
-		  while (idx2token[token_idx] != '\n' && response_tokens.length < 500){
-			  response_tokens.push(token_idx);
+		  while (idx2token[token_idx] != '\n' && response.length < 500){
+			  response = response + idx2token[token_idx];
+			  output.textContent = `${response}`;
 			  token_idx = await next_token(token_idx, hidden);
-		  };
-		  const response = response_tokens.map(i => idx2token[i]).join('');
-		  output.textContent = `${response}`;
+		  };		  
 	  };
       button.addEventListener('click', () => {
         sample(selection.value);
