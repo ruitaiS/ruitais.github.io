@@ -17,7 +17,7 @@ header {
 }
 
 nav {
-  /* mobile: 2x2 grid layout */
+  /* mobile: 2x2 grild layout */
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 0.8rem;
@@ -57,10 +57,9 @@ article .header {
   font-weight: bold;
   color: #000;
   text-decoration: none;
-  font-size: 2.4rem; /* bigger logo on small screens */
+  font-size: 2.4rem;
 }
 
-/* Hover Effects (unchanged) */
 [class^="hvr-"] {
   width: 150px;
   border-radius: 8px;
@@ -109,24 +108,21 @@ article .header {
 
 /* --- Breakpoints --- */
 
-/* XS: up to 319px (explicit override for 2x2 grid links) */
-@media (max-width: 319px) {
+@media (max-width: 369px) {
   nav { display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 0.8rem; }
   nav a.hvr-sweep-to-right { display: block; width: 100%; }
 }
 
-/* SM and up: 320px+ */
-@media (min-width: 320px) {
+@media (min-width: 370px) {
   /* still keep 2x2 layout for small devices */
   nav { display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 1rem; }
   nav a.hvr-sweep-to-right { display: block; }
 }
 
-/* MD and up: 640px+ (tablet/desktop) */
 @media (min-width: 640px) {
   body { width: 60rem; margin: 0 auto; padding: 0; }
   header { margin: 0 0 3rem; }
-  nav { display: flex; justify-content: flex-end; text-align: right; margin: 0; }
+  nav { display: flex; justify-content: flex-end; text-align: right; margin: 0; grid-gap: 1rem; }
   nav a.hvr-sweep-to-right { display: inline-block; margin: 0 0 0 1.2rem; }
 
   footer { text-align: right; }

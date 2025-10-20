@@ -6,10 +6,10 @@ import Dropdown from "@components/Dropdown.astro"
 
 <BaseLayout title="RNN Language Model">
   <Article>
-    <div style="display: flex; gap: 0.5rem; align-items: center;">
+    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
       <label for="selection" style="font-weight: bold;">Book:</label>
       <Dropdown id="selection" style="padding: 0.25rem 0.5rem;"></Dropdown>
-      <button id="generate" disabled style="padding: 0.4rem 0.8rem;">Loading..</button>
+      <button id="generate" disabled style="padding: 0.4rem 0.8rem; flex-basis: 100%; max-width: max-content; ">Loading..</button>
     </div>
 
     <div id="output" style="margin-top: 1rem; font-family: ui-monospace, Menlo, monospace;"></div>
