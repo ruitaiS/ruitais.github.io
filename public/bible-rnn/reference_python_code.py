@@ -7,6 +7,13 @@ def init_hidden(self, batch_size):
     return (h, c)
 
 
+def next_token_idx(token_idx, h, c):
+    logits, h, c = model(torch.tensor([[token_idx]]), h, c)
+    probs = F.softmax(logits, dim=1)
+    next_idx = torch.multinomial(probs, num_samples=1).item()
+    return next_idx, hidden
+
+
 def next_token_idx(model, token_idx, hidden, top_k=None, temperature=1.0):
     model.eval()
     h, c = hidden

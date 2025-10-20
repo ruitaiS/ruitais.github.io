@@ -30,6 +30,18 @@ import Dropdown from "@components/Dropdown.astro"
       button.disabled = false;
       button.textContent="Generate";
 
+	  function multinomial(probs){
+		  let acc = 0;
+		  const r = Math.random();
+		  for (let i = 0; i < probs.length; i++){
+			  acc += probs[i];
+			  if (r < acc){
+				  return i;
+			  };
+		  };
+		  return token2idx['\n']; // End token as fallback
+	  };
+
 	  async function prime_hidden(priming_indices){
 		  const h = new ort.Tensor(
 			  'float32',
@@ -40,44 +52,40 @@ import Dropdown from "@components/Dropdown.astro"
 			  new Float32Array(model_assets.lstm_layers * model_assets.hidden_dim),
 			  [model_assets.lstm_layers, 1, model_assets.hidden_dim]);
 
+		  const hidden = { "h": h, "c": c };
+
 		  let token_idx = null;
 		  for (let i = 0; i < priming_indices.length; i++){
 			  // Prime the hidden state
 			  // final value of token_idx is our first response token
-			  token_idx = await next_token(priming_indices[i], h, c);
+			  token_idx = await next_token(priming_indices[i], hidden);
 		  }
-		  return { token_idx, h, c }
+		  return { token_idx, hidden }
 	  };
 
-	  async function next_token(token_idx, h, c){
-		  // TODO
-		  // Wrap onnx export so it is (token_idx, h, c) => (logits, new_h, new_c)
-		  // Update h, c in-place
-		  // Select and return next_idx from logits
-		  const next_idx = 5;
-		  return next_idx
+	  const buf = new BigInt64Array(1);
+	  async function next_token(token_idx, hidden){
+		  buf[0] = BigInt(token_idx);
+		  const output = await session.run({
+			  "input_idx": new ort.Tensor('int64', buf, [1,1]),
+			  "input_h": hidden.h,
+			  "input_c": hidden.c
+		  });
+		  hidden.h = output['h'];
+		  hidden.c = output['c'];
+		  return multinomial(output['probs'].data);
 	  };
 
       async function sample(prime) {
 		  const response_tokens = [];
 		  const priming_indices = Array.from(prime).map(char => token2idx[char]);
-		  let { token_idx, h, c } = await prime_hidden(priming_indices);
+		  let { token_idx, hidden } = await prime_hidden(priming_indices);
 		  while (idx2token[token_idx] != '\n' && response_tokens.length < 500){
 			  response_tokens.push(token_idx);
-			  token_idx = await next_token(token_idx, h, c);
+			  token_idx = await next_token(token_idx, hidden);
 		  };
 		  const response = response_tokens.map(i => idx2token[i]).join('');
-		  console.log({response})
 		  output.textContent = `${response}`;
-
-		  //console.log({prime});
-		  //console.log({priming_indices});
-		  //console.log({ h, c });
-		  //console.log({idx2token});
-		  //console.log({token2idx});
-		  //console.log(session);
-		  //console.log(ort);
-		  //output.textContent = `Prime Chars: ${prime}`;
 	  };
       button.addEventListener('click', () => {
         sample(selection.value);
