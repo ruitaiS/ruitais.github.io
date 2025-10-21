@@ -2,6 +2,7 @@
 import BaseLayout from "@layouts/BaseLayout.astro"
 import Article from "@components/Article.astro"
 import Dropdown from "@components/Dropdown.astro"
+import OutputBox from "@/components/OutputBox.astro"
 ---
 
 <BaseLayout title="RNN Language Model">
@@ -11,8 +12,15 @@ import Dropdown from "@components/Dropdown.astro"
       <Dropdown id="selection" style="padding: 0.25rem 0.5rem;"></Dropdown>
       <button id="generate" disabled style="padding: 0.4rem 0.8rem; flex-basis: 100%; max-width: max-content; ">Loading..</button>
     </div>
+	<div id="output" style="margin-top: 1rem; font-family: ui-monospace, Menlo, monospace;"></div>
 
-    <div id="output" style="margin-top: 1rem; font-family: ui-monospace, Menlo, monospace;"></div>
+	<div style="border-top:  0.2rem solid #000; margin-top: 3rem; ">
+		<p>Fusce tortor quam, egestas in posuere quis, porttitor vel turpis. Donec vulputate porttitor augue at rhoncus. Proin iaculis consectetur sagittis. Curabitur venenatis turpis sit amet purus tristique nec posuere risus laoreet. Nullam nisi sem, dapibus id semper id, egestas vel arcu. Morbi porttitor ipsum placerat erat consequat sed consequat purus feugiat. Donec auctor elit ut risus mattis facilisis. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p>Proin vulputate sapien facilisis leo ornare pulvinar. Fusce tempus massa a risus semper iaculis. Suspendisse sollicitudin posuere nunc, sit amet rutrum leo facilisis mattis. Sed ornare auctor dui, vitae rutrum neque auctor sit amet. Proin ac dui magna. Mauris vehicula interdum augue, nec ultrices libero egestas quis. Nunc convallis euismod ipsum, id sollicitudin orci consequat ac. Fusce bibendum congue libero, in rutrum nulla congue non. Cras sit amet risus tortor, eu pellentesque dui. Phasellus euismod enim non nibh sodales quis consectetur lorem laoreet. Vivamus a egestas quam. Curabitur in tortor augue, vitae varius tellus. Integer varius, elit ac gravida suscipit, eros erat pellentesque nisi, et tristique augue odio id nulla. Aliquam sit amet nunc vel tellus hendrerit tempus ac vel sem.</p>
+        <p>Aenean tincidunt sollicitudin sapien ut porttitor. Curabitur molestie adipiscing lorem vel scelerisque. Donec vitae interdum est. Proin rutrum vulputate faucibus. Suspendisse sit amet felis odio, non volutpat ante. Sed eu lectus quam. Curabitur tristique rhoncus est, vel commodo tortor suscipit semper. Maecenas feugiat vestibulum nisi id facilisis. Nulla non tincidunt libero. Praesent ultrices interdum commodo. Sed euismod nisl auctor leo ultrices rutrum. Aliquam nibh felis, congue molestie blandit at, bibendum at eros. Aenean tincidunt, tortor iaculis placerat sollicitudin, lorem justo tempor diam, et posuere sapien leo et magna. Quisque vel aliquam mauris.</p>        
+
+		<p>You can find the PyTorch code for this model, as well as some of my other language modelling projects, in this <a href="https://github.com/ruitaiS/language_models">[GitHub Repository]</a>.</p>
+	</div>
 
     <script>
       import { initialize_ort } from "@scripts/ort_handler";
