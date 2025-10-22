@@ -1,6 +1,6 @@
 ---
 import Article from "@components/Article.astro"
-import Content from "@content/projects/byble-rnn.md"
+import Content from "@content/projects/bible-rnn.md"
 import booksList from "@data/bible-rnn/books.txt?raw"
 const books = booksList.split(/\r?\n/).filter(Boolean);
 ---
@@ -8,7 +8,7 @@ const books = booksList.split(/\r?\n/).filter(Boolean);
 <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
 	<label for="selection" style="font-weight: bold;">Book:</label>
 	<select id="selection" name="selection" style="padding: 0.25rem 0.5rem;">
-		<option value="<">(None)</option>
+		<option value="<"></option>
 		{books.map(book => <option value={`<${book}>\t`}>{book}</option>)}
 	</select>
 	<button id="generate" disabled style="padding: 0.4rem 0.8rem; flex-basis: 100%; max-width: max-content; ">Loading..</button>

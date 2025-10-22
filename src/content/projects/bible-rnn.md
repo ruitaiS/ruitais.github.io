@@ -1,4 +1,27 @@
-This is a character level LSTM Recurrent Neural Network trained on the Bible as a text corpus, written in pytorch and served clientside within the web browser via ONNX web runtime.
+### Intro
+
+This is a lightweight character level [LSTM](https://en.wikipedia.org/wiki/Long_short-term_memory) Recurrent Neural Network trained on the Bible as a text corpus. Data processing, model implementation, and model training are done in Python using Pandas and PyTorch. Matplotlib was used for initial data exploration and visualization of training metrics as part of model fine-tuning. After several development iterations, the finalized computation graph is exported to [ONNX](https://docs.pytorch.org/docs/stable/onnx.html) format, allowing it to be served to the client for in-browser inference via the [`onnxruntime-web`](https://onnxruntime.ai/docs/) Javascript library.
+
+The final model package (comprising the `.onnx` model file, model vocabulary and metadata assets, and the embedded JS code needed to sample from the model) comes in at under `22mb`.
+
+You can find the PyTorch code for this model, as well as some of my other language modelling projects, in this [GitHub Repository](https://github.com/ruitaiS/language_models).
+
+[TODO]
+- Time to load
+- Time per token
+- Training eval metrics
+
+### Model Architecture
+
+### Dataset
+
+### Finetuning
+
+### 
+
+
+
+ exported to the [] `.onnx` format, where it is served client-side written in pytorch and served clientside within the web browser via ONNX web runtime.
 
 The original text starts with the book name, followed by a tab character, and ending with the newline character, which proved to be very useful as it allowed clear delineations between the start of each verse, the book and verse strings, and the end of the verse.
 
@@ -21,5 +44,3 @@ porting to the onnx web runtime was a fairly straightfoward, though fairly invol
 future developments will be gpu support (the current model is trained entirely on cpu, as i did not have a gpu at the time, but having recently purchased one, i'm eager to try it out) as well as word-level or byte-pair tokenization. i did briefly experiment with word-level tokenization, but because of the increase in vocabulary size as a result of cataloguing individual words rather than unique characters, it created substantially larger models than the character level ones (\>100mb) and were larger than github would allow hosting, so this idea was abandoned as it would be too large to allow for in-browser inference on a hosted github pages site. however, it seems that because converting into onnx strips out the optimizer, the onnx models are about half the size of the pytorch models, so this has resurfaced as an avenue worth exploring.
 
 all in all this was an incredibly informative experience during which i got to touch all aspects of ml model deployment, from data cleaning and preparation, model architecture implementation, training finetuning, model export, and porting generation code for client-side inference.
-
-You can find the PyTorch code for this model, as well as some of my other language modelling projects, in this [GitHub Repository](https://github.com/ruitaiS/language_models).
