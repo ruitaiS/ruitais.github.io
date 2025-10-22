@@ -1,8 +1,9 @@
 ---
-const { posted, updated, author } = Astro.props;
+import BaseLayout from "@layouts/BaseLayout.astro"
+const { title, posted, updated, author } = Astro.props;
 ---
-
-<article>
+<BaseLayout title={title}>
+	<article>
 	{(posted || updated || author) && (
 		<section class="header">
 		{posted && <>Posted on {posted}</>}
@@ -12,3 +13,4 @@ const { posted, updated, author } = Astro.props;
 	)}
 	<section><slot /></section>
 </article>
+</BaseLayout>

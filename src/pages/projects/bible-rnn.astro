@@ -1,101 +1,100 @@
 ---
-import BaseLayout from "@layouts/BaseLayout.astro"
 import Article from "@components/Article.astro"
-import Dropdown from "@components/Dropdown.astro"
 import Content from "@content/projects/byble-rnn.md"
+import booksList from "@data/bible-rnn/books.txt?raw"
+const books = booksList.split(/\r?\n/).filter(Boolean);
 ---
+<Article title="RNN Language Model">
+<div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
+	<label for="selection" style="font-weight: bold;">Book:</label>
+	<select id="selection" name="selection" style="padding: 0.25rem 0.5rem;">
+		<option value="<">(None)</option>
+		{books.map(book => <option value={`<${book}>\t`}>{book}</option>)}
+	</select>
+	<button id="generate" disabled style="padding: 0.4rem 0.8rem; flex-basis: 100%; max-width: max-content; ">Loading..</button>
+</div>
+<div id="output" style="margin-top: 1rem; font-family: ui-monospace, Menlo, monospace;"></div>
+<div style="border-top:  0.2rem solid #000; margin-top: 3rem; ">
+	<Content/>
+</div>
 
-<BaseLayout title="RNN Language Model">
-  <Article>
-    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
-      <label for="selection" style="font-weight: bold;">Book:</label>
-      <Dropdown id="selection" style="padding: 0.25rem 0.5rem;"></Dropdown>
-      <button id="generate" disabled style="padding: 0.4rem 0.8rem; flex-basis: 100%; max-width: max-content; ">Loading..</button>
-    </div>
-	<div id="output" style="margin-top: 1rem; font-family: ui-monospace, Menlo, monospace;"></div>
+<script>
+	import { initialize_ort } from "@scripts/ort_handler";
+	const { ort, session } = await initialize_ort();
+	type Tensor = import('onnxruntime-web').Tensor;
+	
+	const selection = document.getElementById('selection')! as HTMLSelectElement;
+	const button = document.getElementById('generate')! as HTMLButtonElement;
+	const output = document.getElementById('output')! as HTMLElement;
+	
+	const model_assets = await fetch('/bible-rnn/model_assets.json').then(r => r.json());
+	const idx2token = [...model_assets.specials, ...model_assets.chars];
+	const token2idx: Record<string, number> = {};
+	for (let i = 0; i < idx2token.length; i++) {
+	token2idx[idx2token[i]] = i;
+	}
+	button.disabled = false;
+	button.textContent="Generate";
 
-	<div style="border-top:  0.2rem solid #000; margin-top: 3rem; ">
-		<Content/>
-	</div>
+	function multinomial(probs: ArrayLike<number>){
+		let acc = 0;
+		const r = Math.random();
+		for (let i = 0; i < probs.length; i++){
+			acc += probs[i];
+			if (r < acc){
+				return i;
+			};
+		};
+		return token2idx['\n']; // End token as fallback
+	};
 
-    <script>
-      import { initialize_ort } from "@scripts/ort_handler";
-      const { ort, session } = await initialize_ort();
-	  type Tensor = import('onnxruntime-web').Tensor;
-	  
-	  const selection = document.getElementById('selection')! as HTMLSelectElement;
-      const button = document.getElementById('generate')! as HTMLButtonElement;
-      const output = document.getElementById('output')! as HTMLElement;
-	  
-      const model_assets = await fetch('/bible-rnn/model_assets.json').then(r => r.json());
-      const idx2token = [...model_assets.specials, ...model_assets.chars];
-      const token2idx: Record<string, number> = {};
-      for (let i = 0; i < idx2token.length; i++) {
-        token2idx[idx2token[i]] = i;
-      }
-      button.disabled = false;
-      button.textContent="Generate";
+	async function prime_hidden(priming_indices: number[]){
+		const h = new ort.Tensor(
+			'float32',
+			new Float32Array(model_assets.lstm_layers * model_assets.hidden_dim),
+			[model_assets.lstm_layers, 1, model_assets.hidden_dim]);
+		const c = new ort.Tensor(
+			'float32',
+			new Float32Array(model_assets.lstm_layers * model_assets.hidden_dim),
+			[model_assets.lstm_layers, 1, model_assets.hidden_dim]);
 
-	  function multinomial(probs: ArrayLike<number>){
-		  let acc = 0;
-		  const r = Math.random();
-		  for (let i = 0; i < probs.length; i++){
-			  acc += probs[i];
-			  if (r < acc){
-				  return i;
-			  };
-		  };
-		  return token2idx['\n']; // End token as fallback
-	  };
+		const hidden = { "h": h, "c": c };
+		let token_idx = token2idx['\n']; // Fallback
+		for (let i = 0; i < priming_indices.length; i++){
+			// Prime the hidden state
+			// Final value of token_idx is our first response token
+			token_idx = await next_token(priming_indices[i], hidden);
+		}
+		return { token_idx, hidden }
+	};
 
-	  async function prime_hidden(priming_indices: number[]){
-		  const h = new ort.Tensor(
-			  'float32',
-			  new Float32Array(model_assets.lstm_layers * model_assets.hidden_dim),
-			  [model_assets.lstm_layers, 1, model_assets.hidden_dim]);
-		  const c = new ort.Tensor(
-			  'float32',
-			  new Float32Array(model_assets.lstm_layers * model_assets.hidden_dim),
-			  [model_assets.lstm_layers, 1, model_assets.hidden_dim]);
+	const buf = new BigInt64Array(1);
+	async function next_token(token_idx: number, hidden: Record<string, Tensor>){
+		buf[0] = BigInt(token_idx);
+		const output = await session.run({
+			"input_idx": new ort.Tensor('int64', buf, [1,1]),
+			"input_h": hidden.h,
+			"input_c": hidden.c
+		});
+		hidden.h = output['h'];
+		hidden.c = output['c'];
+		const probs = output['probs'].data as Float32Array;
+		return multinomial(probs);
+	};
 
-		  const hidden = { "h": h, "c": c };
-		  let token_idx = token2idx['\n']; // Fallback
-		  for (let i = 0; i < priming_indices.length; i++){
-			  // Prime the hidden state
-			  // Final value of token_idx is our first response token
-			  token_idx = await next_token(priming_indices[i], hidden);
-		  }
-		  return { token_idx, hidden }
-	  };
-
-	  const buf = new BigInt64Array(1);
-	  async function next_token(token_idx: number, hidden: Record<string, Tensor>){
-		  buf[0] = BigInt(token_idx);
-		  const output = await session.run({
-			  "input_idx": new ort.Tensor('int64', buf, [1,1]),
-			  "input_h": hidden.h,
-			  "input_c": hidden.c
-		  });
-		  hidden.h = output['h'];
-		  hidden.c = output['c'];
-		  const probs = output['probs'].data as Float32Array;
-		  return multinomial(probs);
-	  };
-
-      async function sample(prime: string) {
-		  let response = "";
-		  const priming_indices = Array.from(prime).map(char => token2idx[char]);
-		  let { token_idx, hidden } = await prime_hidden(priming_indices);
-		  while (idx2token[token_idx] != '\n' && response.length < 500){
-			  response = response + idx2token[token_idx];
-			  output.textContent = `${response}`;
-			  await new Promise(requestAnimationFrame); // TODO: worker + rAF; this is too slow
-			  token_idx = await next_token(token_idx, hidden);
-		  };		  
-	  };
-      button.addEventListener('click', () => {
-        sample(selection.value);
-      });
-    </script>
-  </Article>
-</BaseLayout>
+	async function sample(prime: string) {
+		let response = "";
+		const priming_indices = Array.from(prime).map(char => token2idx[char]);
+		let { token_idx, hidden } = await prime_hidden(priming_indices);
+		while (idx2token[token_idx] != '\n' && response.length < 500){
+			response = response + idx2token[token_idx];
+			output.textContent = `${response}`;
+			await new Promise(requestAnimationFrame); // TODO: worker + rAF; this is too slow
+			token_idx = await next_token(token_idx, hidden);
+		};		  
+	};
+	button.addEventListener('click', () => {
+	sample(selection.value);
+	});
+</script>
+</Article>
