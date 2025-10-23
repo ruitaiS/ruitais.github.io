@@ -35,6 +35,8 @@ const books = booksList.split(/\r?\n/).filter(Boolean);
 	}
 	button.disabled = false;
 	button.textContent="Generate";
+	console.log(`Load Time: ${performance.now().toFixed(2)} ms`);
+
 
 	function multinomial(probs: ArrayLike<number>){
 		let acc = 0;
