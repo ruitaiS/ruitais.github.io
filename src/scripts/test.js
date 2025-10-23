@@ -2,8 +2,8 @@ import * as ort from 'onnxruntime-web';
 ort.env.wasm.wasmPaths = new URL('ort/', self.location.origin).toString();
 ort.env.logLevel = 'error';
 
-const session = await ort.InferenceSession.create('/bible-rnn/model.onnx', {executionProviders: ['wasm']});
-const model_assets = await fetch('/bible-rnn/model_assets.json').then(r => r.json());
+const session = ort.InferenceSession.create('/bible-rnn/model.onnx', {executionProviders: ['wasm']});
+const model_assets = fetch('/bible-rnn/model_assets.json').then(r => r.json());
 const idx2token = [...model_assets.specials, ...model_assets.chars];
 const token2idx = {};
 for (let i = 0; i < idx2token.length; i++) {
