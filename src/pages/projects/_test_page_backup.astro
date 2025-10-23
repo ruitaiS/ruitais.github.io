@@ -5,40 +5,23 @@
   </head>
   <body>
     <main>
-		<div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
-			<label for="selection" style="font-weight: bold;">Book:</label>
-			<select id="selection" name="selection" style="padding: 0.25rem 0.5rem;">
-				<option value="<"></option>
-				<option value="Genesis"></option>
-			</select>
-			<button id="generate" disabled style="padding: 0.4rem 0.8rem; flex-basis: 100%; max-width: max-content; ">Loading..</button>
-		</div>
-		<div id="output" style="margin-top: 1rem; font-family: ui-monospace, Menlo, monospace;"></div>
+      <h1 id="text"></h1>
+      <button id="start">Start</button>
     </main>
   </body>
   <script>
 	const worker = new Worker(new URL("@scripts/test", import.meta.url), { type: "module" });
+	const btn = document.getElementById("start");
+	const h1  = document.getElementById("text");
 
-	const selection = document.getElementById('selection')! as HTMLSelectElement;
-	const button = document.getElementById('generate')! as HTMLButtonElement;
-	const output = document.getElementById('output')! as HTMLElement;
+	// Use a dedicated Text node to avoid repeated layout work on elements
 	const textNode = document.createTextNode("");
-	output.appendChild(textNode);
-
-	textNode.data += "hello"
-	textNode.data += " world"
+	h1.appendChild(textNode);
 
 	// Buffer incoming chunks; flush once per frame
 	let buffer = "";
 	let running = false;
 	let rafId = 0;
-
-	worker.onmessage = (e) =>{
-		if (e.data?.type !== "ready") return;
-		button.disabled = false;
-		button.textContent="Generate";
-		worker.onmessage = msgHandler;
-	}
 
 	function flush() {
 		if (buffer.length) {
@@ -48,8 +31,8 @@
 		}
 		if (running) rafId = requestAnimationFrame(flush);
 	}
-	
-	function msgHandler(e) {
+
+	worker.onmessage = (e) => {
 		const { type, data } = e.data;
 		if (type === "chunk") {
 		buffer += data;
@@ -62,7 +45,7 @@
 		}
 	};
 
-	button.addEventListener("click", () => {
+	btn.addEventListener("click", () => {
 		// Reset
 		worker.postMessage({ type: "slowDown", value: false });
 		buffer = "";
