@@ -1,6 +1,6 @@
 import * as ort from 'onnxruntime-web';
 ort.env.wasm.wasmPaths = new URL('ort/', self.location.origin).toString();
-ort.env.logLevel = 'error';
+//ort.env.logLevel = 'error';
 
 async function init(){
   const session = await ort.InferenceSession.create('/bible-rnn/model.onnx', {executionProviders: ['wasm']});
@@ -11,11 +11,12 @@ async function init(){
   token2idx[idx2token[i]] = i;
   }
 
-  console.log(`Load Time: ${performance.now().toFixed(2)} ms`);
-  postMessage({ type: "ready" });
+  return { session, idx2token, token2idx }
 }
 
-init()
+const {session, idx2token, token2idx} = await init()
+console.log(`Load Time: ${performance.now().toFixed(2)} ms`);
+postMessage({ type: "ready" });
 
 
 
