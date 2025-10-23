@@ -1,0 +1,67 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fast Gen + Smooth UI</title>
+  </head>
+  <body>
+    <main>
+      <h1 id="text"></h1>
+      <button id="start">Start</button>
+    </main>
+  </body>
+  <script>
+	const worker = new Worker(new URL("@scripts/test", import.meta.url), { type: "module" });
+	const btn = document.getElementById("start");
+	const h1  = document.getElementById("text");
+
+	// Use a dedicated Text node to avoid repeated layout work on elements
+	const textNode = document.createTextNode("");
+	h1.appendChild(textNode);
+
+	// Buffer incoming chunks; flush once per frame
+	let buffer = "";
+	let running = false;
+	let rafId = 0;
+
+	function flush() {
+		if (buffer.length) {
+		// Append to the text node; avoids HTML parsing and minimizes layout
+		textNode.data += buffer;
+		buffer = "";
+		}
+		if (running) rafId = requestAnimationFrame(flush);
+	}
+
+	worker.onmessage = (e) => {
+		const { type, data } = e.data;
+		if (type === "chunk") {
+		buffer += data;
+		// Simple backpressure: if buffer is too big, ask worker to slow down its post frequency
+		if (buffer.length > 20000) worker.postMessage({ type: "slowDown", value: true });
+		} else if (type === "done") {
+		running = false;
+		cancelAnimationFrame(rafId);
+		flush();
+		}
+	};
+
+	btn.addEventListener("click", () => {
+		// Reset
+		worker.postMessage({ type: "slowDown", value: false });
+		buffer = "";
+		textNode.data = "";
+		running = true;
+		cancelAnimationFrame(rafId);
+		rafId = requestAnimationFrame(flush);
+
+		// Kick off full-speed generation in the worker
+		worker.postMessage({
+		type: "start",
+		text:
+			"Streaming from a Worker at full speed while the main thread paints smoothly. " +
+			"This text is generated without yielding in the worker; the UI updates once per frame."
+		});
+	});
+
+  </script>
+</html>

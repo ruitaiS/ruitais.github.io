@@ -7,6 +7,13 @@
 
 ### Dataset
 
+[fixed length sequences >> right-aligned verses >> (still need to retrain this) left-aligned verses]
+
+- left aligned verses
+- Remove unnecessary characters (eg. remove `<` entirely at the start, and `>\t` should be shortened to `\t`)
+	- consistent start tokens are valuable for cross sequence sampling, but if we assume we're always going to generate a single sequence, it is basically noise the model has to learn to ignore. 
+	- using `>\t` as a boundary instead of `\t` takes up space in the context window without giving learnable content
+
 ### Finetuning
 
 ### 

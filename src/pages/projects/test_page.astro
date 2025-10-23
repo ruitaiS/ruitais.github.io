@@ -1,0 +1,84 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fast Gen + Smooth UI</title>
+  </head>
+  <body>
+    <main>
+		<div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
+			<label for="selection" style="font-weight: bold;">Book:</label>
+			<select id="selection" name="selection" style="padding: 0.25rem 0.5rem;">
+				<option value="<"></option>
+				<option value="Genesis"></option>
+			</select>
+			<button id="generate" disabled style="padding: 0.4rem 0.8rem; flex-basis: 100%; max-width: max-content; ">Loading..</button>
+		</div>
+		<div id="output" style="margin-top: 1rem; font-family: ui-monospace, Menlo, monospace;"></div>
+    </main>
+  </body>
+  <script>
+	const worker = new Worker(new URL("@scripts/test", import.meta.url), { type: "module" });
+
+	const selection = document.getElementById('selection')! as HTMLSelectElement;
+	const button = document.getElementById('generate')! as HTMLButtonElement;
+	const output = document.getElementById('output')! as HTMLElement;
+	const textNode = document.createTextNode("");
+	output.appendChild(textNode);
+
+	textNode.data += "hello"
+	textNode.data += " world"
+
+	// Buffer incoming chunks; flush once per frame
+	let buffer = "";
+	let running = false;
+	let rafId = 0;
+
+	worker.onmessage = (e) =>{
+		if (e.data?.type !== "ready") return;
+		button.disabled = false;
+		button.textContent="Generate";
+		worker.onmessage = msgHandler;
+	}
+
+	function flush() {
+		if (buffer.length) {
+		// Append to the text node; avoids HTML parsing and minimizes layout
+		textNode.data += buffer;
+		buffer = "";
+		}
+		if (running) rafId = requestAnimationFrame(flush);
+	}
+	
+	function msgHandler(e) {
+		const { type, data } = e.data;
+		if (type === "chunk") {
+		buffer += data;
+		// Simple backpressure: if buffer is too big, ask worker to slow down its post frequency
+		if (buffer.length > 20000) worker.postMessage({ type: "slowDown", value: true });
+		} else if (type === "done") {
+		running = false;
+		cancelAnimationFrame(rafId);
+		flush();
+		}
+	};
+
+	button.addEventListener("click", () => {
+		// Reset
+		worker.postMessage({ type: "slowDown", value: false });
+		buffer = "";
+		textNode.data = "";
+		running = true;
+		cancelAnimationFrame(rafId);
+		rafId = requestAnimationFrame(flush);
+
+		// Kick off full-speed generation in the worker
+		worker.postMessage({
+		type: "start",
+		text:
+			"Streaming from a Worker at full speed while the main thread paints smoothly. " +
+			"This text is generated without yielding in the worker; the UI updates once per frame."
+		});
+	});
+
+  </script>
+</html>
