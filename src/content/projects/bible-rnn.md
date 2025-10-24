@@ -4,4 +4,4 @@ Data processing, model implementation, and model training are done in Python usi
 
 The entire deployed model package (consisting of the `.onnx` model file and auxiliary assets, the ONNX Runtime WebAssembly module, and the Javascript sampling logic), has a minimal footprint of only 25 MB. Load time is typically `<1s` for desktop<a href="/bible-rnn/desktop_performance.html" class="cite">[1]</a> and `~3s` on mobile.<a href="/bible-rnn/mobile_performance.html" class="cite">[2]</a>
 
-For implementation details, including the full PyTorch source code and related language modeling projects, feel free to visit my [GitHub repository](https://github.com/ruitaiS/language_models).
+For implementation details, including the full PyTorch source code and related language modeling projects, feel free to browse my [GitHub repository](https://github.com/ruitaiS/language_models/tree/master/rnn).

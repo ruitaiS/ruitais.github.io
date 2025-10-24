@@ -1,15 +1,11 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro"
-const { title, posted, updated, author } = Astro.props;
+const { title, date } = Astro.props;
 ---
 <BaseLayout title={title}>
 	<article>
-	{(posted || updated || author) && (
-		<section class="header">
-		{posted && <>Posted on {posted}</>}
-		{updated && <><br />Updated on {updated}</>}
-		{author && <><br />By {author}</>}
-		</section>
+	{(date) && (
+		<section class="header">{date}</section>
 	)}
 	<section><slot /></section>
 </article>
