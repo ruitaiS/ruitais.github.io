@@ -3,6 +3,23 @@
 - Time per token
 - Training eval metrics
 
+### Data Preparation
+
+The source text for this model is the American King James Version of the Bible, which can be found on [OpenBible](https://openbible.com/textfiles/akjv.txt).
+
+A driving factor for the selection of this source material (aside from its incredible cultural and spiritual value) is the consistency of its formatting. Each line begins with the book name, followed by the chapter and the verse numbers, then a tab, and finally the full verse text as one unbroken string. This allows each verse to be treated as its own self-contained unit of text, with clear delineating characters for where the verse starts (`\t`) and ends (`\n`).
+
+I made the decision early on to strip the chapter and verse numbers since they are unnecessarily specific, but I was conflicted whether to keep the book names.
+
+
+
+Without the book names, the model could focus exclusively on the verse text itself, 
+
+Without the book names, the model could focus exclusively on the verse text itself, but including them allows for more interesting generation methods
+
+
+produced more interesting outputs — the model would sometimes choose a book to generate from, or you could guide it by providing priming tokens. Since the overall verse quality was comparable in both cases, I ultimately kept the book names to make the model’s behavior more engaging and varied.
+
 ### Model Architecture
 
 ### Dataset
