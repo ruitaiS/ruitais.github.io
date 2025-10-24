@@ -1,3 +1,12 @@
+<iframe
+  style="width: 100%; aspect-ratio: 16/9; height: auto;"
+  src="https://www.youtube.com/embed/TXL6BhFttAA?si=C7B7TVHpZJSVvN57"
+  title="YouTube video player"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen>
+</iframe>
+
 Nullam imperdiet sodales orci vitae molestie. Nunc quam orci, pharetra a rhoncus vitae, eleifend id felis. Suspendisse potenti. Etiam vitae urna orci. Quisque pellentesque dignissim felis, egestas tempus urna luctus vitae. In hac habitasse platea dictumst. Morbi fringilla mattis odio, et mattis tellus accumsan vitae.
 
 1. Amamus Unicode 碁
