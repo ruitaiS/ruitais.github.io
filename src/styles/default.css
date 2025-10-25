@@ -44,6 +44,12 @@ footer {
   text-align: center;
 }
 
+img.article {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
 a.cite { font-size: 0.75em; vertical-align: super; color: #3366cc; }
 
 h1 { font-size: 2.8rem; }
