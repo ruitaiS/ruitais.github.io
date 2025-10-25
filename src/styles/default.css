@@ -3,14 +3,6 @@ html {
   overflow-y: scroll;
 }
 
-body {
-  font-size: 1.8rem;
-  color: #000;
-  width: 90%;
-  margin: 0;
-  padding: 0 5%;
-}
-
 header {
   border-bottom: 0.2rem solid #000;
   display: flex;
@@ -35,6 +27,24 @@ nav a {
   text-transform: uppercase;
 }
 
+.nav-button{
+  padding: 0.5rem;
+}
+
+.nav-button:hover,
+.nav-button:focus,
+.nav-button:active {
+  text-decoration: underline;
+}
+
+body {
+  font-size: 1.8rem;
+  color: #000;
+  width: 90%;
+  margin: 0;
+  padding: 0 5%;
+}
+
 footer {
   margin-top: 3rem;
   padding: 1.2rem 0;
@@ -56,7 +66,7 @@ img.hero {
   color: #555;
 }
 
-a.cite { font-size: 0.75em; vertical-align: super; color: #3366cc; }
+a.cite { font-size: 0.75em; vertical-align: super;}
 
 h1 { font-size: 2.8rem; margin-bottom: 0rem; margin-top: 2rem;}
 h2 { font-size: 2rem; }
@@ -69,53 +79,13 @@ h2 { font-size: 2rem; }
   margin-bottom: 2rem;
 }
 
-.logo { text-align: center; margin: 1rem auto 3rem; }
-.logo a {
-  font-weight: bold;
-  color: #000;
-  text-decoration: none;
-  font-size: 2.4rem;
-}
-
-.rounded-button {
-  width: 150px;
-  border-radius: 8px;
-  
-  padding: 0.2em;
-  cursor: pointer;
-  background: #e1e1e1;
-  text-decoration: none;
-  color: #555;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.rounded-button:hover,
-.rounded-button:focus,
-.rounded-button:active {
-  background: #2098D1;
-  color: #fff;
-  text-decoration: underline;
-}
-
-.basic-button:hover,
-.basic-button:focus,
-.basic-button:active {
-  text-decoration: underline;
-}
-
 /* --- Breakpoints --- */
 
 @media (max-width: 369px) {
   nav {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 0.8rem;
-  }
-  nav a.hvr-sweep-to-right {
-    display: block;
-    width: 100%;
+    grid-gap: 2rem;
   }
 }
 
@@ -123,10 +93,7 @@ h2 { font-size: 2rem; }
   nav {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 1rem;
-  }
-  nav a.hvr-sweep-to-right {
-    display: block;
+    grid-gap: 2rem;
   }
 }
 
@@ -138,14 +105,11 @@ h2 { font-size: 2rem; }
   }
   nav {
     display: flex;
-    justify-content: flex-end;
-    text-align: right;
+    text-align: center;
     margin: 0;
     grid-gap: 1rem;
   }
-  nav a.hvr-sweep-to-right {
-    display: inline-block;
-  }
+
   footer {
     text-align: right;
   }
