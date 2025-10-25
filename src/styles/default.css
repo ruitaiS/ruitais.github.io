@@ -16,7 +16,7 @@ nav {
   grid-gap: 0.8rem;
   text-align: center;
   margin: 0 auto 3rem;
-  justify-content: flex-end;
+  justify-content: space-around;
 }
 
 nav a {
