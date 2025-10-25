@@ -15,7 +15,7 @@ header {
   border-bottom: 0.2rem solid #000;
   display: flex;
   flex-direction: column;
-  margin: 1rem 0;
+  margin: 0;
 }
 
 nav {
@@ -53,22 +53,22 @@ img.hero {
   max-width: 100%;
   text-align: right;
   font-size: 1.5rem;
-  color: #666;
+  color: #555;
   margin-top: 0.25rem;
   margin-bottom: 1rem;
 }
 
 a.cite { font-size: 0.75em; vertical-align: super; color: #3366cc; }
 
-h1 { font-size: 2.8rem; margin-bottom: 0rem;}
+h1 { font-size: 2.8rem; margin-bottom: 0rem; margin-top: 2rem;}
 h2 { font-size: 2rem; }
 
-article .date {
+.date {
   font-size: 1.4rem;
   font-style: italic;
   color: #555;
   margin-top: 0.25rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .logo { text-align: center; margin: 1rem auto 3rem; }

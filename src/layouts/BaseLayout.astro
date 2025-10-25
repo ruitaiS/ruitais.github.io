@@ -1,7 +1,7 @@
 ---
 import "@styles/default.css"
 import Header from "@components/Header.astro"
-const { title=":)" } = Astro.props;
+const { title=":)", date} = Astro.props;
 const favicon_href = import.meta.env.MODE === 'development' ? (
     '/dev-favicon.ico'
 ) : (
@@ -21,6 +21,9 @@ const favicon_href = import.meta.env.MODE === 'development' ? (
         <slot name="header"><Header /></slot>
         <main>
 			<h1>{title}</h1>
+            {(date) && (
+                <section class="date">{date}</section>
+            )}
 			<slot />
         </main>
         <footer>
