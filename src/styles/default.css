@@ -61,23 +61,28 @@ img.hero {
 }
 
 .project-source {
+  display: block; 
   max-width: 100%;
   text-align: right;
   font-size: 1.5rem;
-  color: #555;
+  color: #777;
+  margin: 0rem;
 }
 
 a.cite { font-size: 0.75em; vertical-align: super;}
 
-h1 { font-size: 2.8rem; margin-bottom: 0rem; margin-top: 2rem;}
+.title{
+  margin-bottom: 3rem;
+}
+
+h1 { font-size: 3rem; margin-bottom: 0rem; margin-top: 2rem;}
 h2 { font-size: 2rem; }
 
 .date {
   font-size: 1.4rem;
   font-style: italic;
-  color: #555;
+  color: #777;
   margin-top: 0.25rem;
-  margin-bottom: 2rem;
 }
 
 /* --- Breakpoints --- */

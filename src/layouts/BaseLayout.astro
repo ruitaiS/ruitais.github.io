@@ -20,11 +20,14 @@ const favicon_href = import.meta.env.MODE === 'development' ? (
     <body>
         <slot name="header"><Header /></slot>
         <main>
-			<h1>{title}</h1>
-            {(date) && (
-                <section class="date">{date}</section>
-            )}
-			<slot />
+            <div class="title">
+                <h1>{title}</h1>
+                {(date) && (
+                    <section class="date">{date}</section>
+                )}
+            </div>
+			
+			<slot/>
         </main>
         <footer>
             <p>
