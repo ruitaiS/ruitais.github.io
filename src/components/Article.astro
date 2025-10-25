@@ -4,9 +4,9 @@ const { title, date } = Astro.props;
 ---
 <BaseLayout title={title}>
 	<article>
-	{(date) && (
-		<section class="header">{date}</section>
-	)}
-	<section><slot /></section>
-</article>
+		{(date) && (
+			<section class="date">{date}</section>
+		)}
+		<section><slot /></section>
+	</article>
 </BaseLayout>
