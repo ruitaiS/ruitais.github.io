@@ -11,3 +11,6 @@ Morbi sed nisi tempor, dignissim felis aliquam, placerat nisi. Ut vitae purus co
 <div style="border-top:  0.2rem solid #000; margin-top: 3rem; ">
 
 Gatys, L. A., Ecker, A. S., & Bethge, M. (2016). [*Image Style Transfer Using Convolutional Neural Networks*](https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Gatys_Image_Style_Transfer_CVPR_2016_paper.pdf). Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2414–2423.
+
+Museum of Modern Art. (n.d.). [*Andy Warhol. Marilyn Monroe (1967)*](https://www.moma.org/collection/works/portfolios/61240). *MoMA*.
+
