@@ -78,7 +78,7 @@ img.hero {
   max-width: 100%;
   text-align: right;
   font-size: 1.5rem;
-  color: #777;
+  color: #777 !important;
   margin: 0rem;
 }
 
