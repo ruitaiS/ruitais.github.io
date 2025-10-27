@@ -2,6 +2,12 @@
 import BaseLayout from "@layouts/BaseLayout.astro"
 const { title, date } = Astro.props;
 ---
-<BaseLayout title={title} date={date}>
+<BaseLayout title={title}>
+	<div class="title">
+		<h1>{title}</h1>
+		{(date) && (
+			<section class="date">{date}</section>
+		)}
+	</div>
 	<section><slot /></section>
 </BaseLayout>

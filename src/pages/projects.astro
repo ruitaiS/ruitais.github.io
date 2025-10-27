@@ -1,9 +1,9 @@
 ---
-import BaseLayout from "@layouts/BaseLayout.astro";
+import Article from "@/components/Article.astro"
 import ProjectList from "@components/ProjectList.astro"
 ---
 
-<BaseLayout title="Projects">
+<Article title="Projects">
     <details open>
         <summary><strong>Current Work</strong></summary>
         <ProjectList/>
@@ -18,4 +18,4 @@ import ProjectList from "@components/ProjectList.astro"
             <li><a href="https://ruitais.github.io/rockpaperscissors/">Rock Paper Scissors Javascript Game</a> - May 2020</li>
         </ul>
     </details>
-</BaseLayout>
+</Article>
