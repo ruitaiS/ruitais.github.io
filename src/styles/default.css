@@ -68,6 +68,10 @@ footer {
   text-align: center;
 }
 
+summary {
+  cursor: pointer;
+}
+
 img.hero {
   max-width: 100%;
   display: block;
