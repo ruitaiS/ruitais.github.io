@@ -4,5 +4,16 @@ import ProjectList from "@components/ProjectList.astro"
 ---
 
 <BaseLayout title="Projects">
+    <summary><strong>Current Work</strong></summary>
     <ProjectList/>
+
+    <details>
+        <summary><strong>Archive</strong></summary>
+        <ul>
+            <li><a href="alpaca-api.html">Trading Platform with Alpaca Stock API</a> - March 2021</li>
+            <li><a href="csv-grid.html">CSV Grid World Builder</a> - July 2020</li>
+            <li><a href="clone-google.html">Cloning the Google Frontend</a> - May 2020</li>
+            <li><a href="rps.html">Rock Paper Scissors Javascript Game</a> - May 2020</li>
+        </ul>
+    </details>
 </BaseLayout>
