@@ -20,19 +20,30 @@ const books = booksList.split(/\r?\n/).filter(Boolean);
 
 <script>
 	import { initialize_ort } from "@scripts/ort_handler";
-	const { ort, session } = await initialize_ort();
 	type Tensor = import('onnxruntime-web').Tensor;
-	
+	type InferenceSession = import('onnxruntime-web').InferenceSession;
+	type ORT = typeof import('onnxruntime-web')
 	const selection = document.getElementById('selection')! as HTMLSelectElement;
 	const button = document.getElementById('generate')! as HTMLButtonElement;
 	const output = document.getElementById('output')! as HTMLElement;
-	
-	const model_assets = await fetch('/bible-rnn/model_assets.json').then(r => r.json());
-	const idx2token = [...model_assets.specials, ...model_assets.chars];
-	const token2idx: Record<string, number> = {};
-	for (let i = 0; i < idx2token.length; i++) {
-	token2idx[idx2token[i]] = i;
+
+	let ort: ORT, session: InferenceSession;
+	let model_assets: Record<string, any>, idx2token: Array<string>, token2idx: Record<string, number>;
+	try {
+		({ ort, session } = await initialize_ort());
+		model_assets = await fetch('/bible-rnn/model_assets.json').then(r => {
+			if (!r.ok) throw new Error(`Failed to fetch model assets: ${r.status}`);
+			return r.json();
+		});
+		idx2token = [...model_assets.specials, ...model_assets.chars];
+		token2idx = {};
+		for (let i = 0; i < idx2token.length; i++) {
+		token2idx[idx2token[i]] = i;
+		}
+	} catch (err) {
+		console.error('Initialization Error:', err);
 	}
+
 	button.disabled = false;
 	button.textContent="Generate";
 	console.log(`Load Time: ${performance.now().toFixed(2)} ms`);
