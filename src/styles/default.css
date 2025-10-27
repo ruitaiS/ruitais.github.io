@@ -68,7 +68,28 @@ footer {
   text-align: center;
 }
 
+/*
 summary {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  padding-left: 1em;
+}
+
+summary::before {
+  content: '►';
+  position: absolute;
+  left: 0;
+  top: -0.2rem;
+  transition: transform 0.2s ease;
+}
+
+details[open] summary::before {
+  transform: translateY(0.2rem);
+  transform: rotate(90deg);
+}*/
+
+details summary {
   cursor: pointer;
 }
 
