@@ -89,12 +89,15 @@ img.hero {
 }
 
 .project-source {
-  display: block; 
   max-width: 100%;
   text-align: right;
+  margin: 0rem;
+}
+
+.project-source a {
+  display: inline-block; 
   font-size: 1.5rem;
   color: #777 !important;
-  margin: 0rem;
 }
 
 a.cite { font-size: 0.75em; vertical-align: super;}

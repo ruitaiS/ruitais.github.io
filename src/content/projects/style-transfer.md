@@ -1,5 +1,7 @@
-<img src="/images/style-transfer.jpg" alt="Style transfer algorithm applied to a grid of plant images" class="hero">
-<a href="https://github.com/ruitaiS/deep_learning_with_pytorch/tree/master/style_transfer" class="project-source">Source Code</a>
+<div>
+	<img src="/images/style-transfer.jpg" alt="Style transfer algorithm applied to a grid of plant images" class="hero">
+	<div class="project-source"><a href="https://github.com/ruitaiS/deep_learning_with_pytorch/tree/master/style_transfer">Source Code</a></div>
+</div>
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec venenatis tristique est, vel tincidunt enim sollicitudin et. Donec laoreet venenatis lorem nec bibendum. Nullam nec fermentum libero. Cras euismod ullamcorper tortor, sed iaculis ex viverra sed. Duis porttitor odio ac ligula dignissim, quis luctus lectus dictum. Fusce vel commodo nulla, ac consectetur elit. Pellentesque vel nunc in erat congue vehicula. Nam rutrum placerat urna, eu ornare ligula sollicitudin eget.
 
