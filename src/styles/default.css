@@ -73,6 +73,16 @@ details summary {
   user-select: none;
 }
 
+.archive {
+    color: transparent;
+    transition: color 0.3s ease;
+}
+
+.archive:hover,
+.archive[open] {
+    color: inherit;
+}
+
 img.hero {
   max-width: 100%;
   display: block;
