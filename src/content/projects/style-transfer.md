@@ -1,5 +1,6 @@
 <div>
-	<img src="/images/style-transfer.jpg" alt="Style transfer algorithm applied to a grid of plant images" class="hero">
+	<img id='display' src="/images/style-transfer/99.jpg" alt="Style transfer algorithm applied to a grid of plant images" class="hero">
+	<input id="scrubber" type="range" min="0" max="99" step="1" value="99" style="width:100%;margin-top:12px" />
 	<div class="project-source"><a href="https://github.com/ruitaiS/deep_learning_with_pytorch/tree/master/style_transfer">Source Code</a></div>
 </div>
 

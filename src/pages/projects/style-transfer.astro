@@ -6,3 +6,11 @@ import Content from "@content/projects/style-transfer.md"
 <Article title="Image Style Transfer" date="August 2025">
 	<Content/>
 </Article>
+
+<script>
+  const scrubber = document.getElementById('scrubber');
+  const display = document.getElementById('display');
+  scrubber.addEventListener('input', event => {
+	display.src = `/images/style-transfer/${event.target.value}.jpg`;
+  });
+</script>
