@@ -10,6 +10,7 @@ import Content from "@content/projects/style-transfer.md"
 <script>
   const scrubber = document.getElementById('scrubber');
   const display = document.getElementById('display');
+  //scrubber.addEventListener('click', event => {
   scrubber.addEventListener('input', event => {
 	display.src = `/images/style-transfer/${event.target.value}.jpg`;
   });

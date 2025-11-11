@@ -1,1 +1,1 @@
-[Github Repo](https://github.com/ruitaiS/language_models/tree/master/ecse_526)
+[Github Repo](https://github.com/ruitaiS/language_models/tree/master/sentence_correction)
