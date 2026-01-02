@@ -1,12 +1,14 @@
 I've been playing around a lot in the GT7 telemetry ecosystem, including writing a rudimentary data logger, but while the developers do expose a lot of valuable telemetry data over the network, one thing that is oddly missing is steering angle input. Though I'm almost certain that this data lives somewhere where i can tap it directly, I figured this would be a good exercise to dip my toe back into computer vision, so i worked out a simple vision-based approach to extracting it from stored footage.
 
+The basic pipeline is: `Grab full frame >> aggressively crop / mask to only our region of interest >> create a binary mask containing the colors we want >> draw a bounding box around the colored region, and find its center`.
+
 The first step is to capture in-game video and transfer it to the computer, where we can load it into OpenCV. In [this boilerplate code](/vision-data/boilerplate.py) we specify the video filepath, create a capture object, and then loop through the frames until there are none left. We also have some basic input checks for closing the window or pausing playback. At the end we release all resources and close all windows to clean up.
 
 Once we have our basic frame by frame iteration loop working, we need to crop each frame to the center region - we don't want to run detection across the entire frame. The information we care about is in this region of the UI highlighted in green:
 
 <img src="/images/vision-data/full_hud.png" alt="GT7 Game Screenshot" class="full_width">
 
-OpenCV images are essentially stored as (h, w, d) numpy arrays. h and w index each pixel's position in the frame, and d is a color space vector representing the color of the pixel (more on this later). Cropping the image to the desired section is simply a matter of slicing the numpy array, via `steering = frame[930:960, 755:1165]`. Note the somewhat unusual convention of `[y_min:y_max, x_min:x_max]` here - height comes before width.
+OpenCV images are essentially stored as (h, w, d) numpy arrays. h and w index each pixel's position in the frame, and d is a color space vector representing the color of the pixel (more on this later). Cropping the image to the desired section is simply a matter of slicing the numpy array, via `frame[930:960, 755:1165]`. Note the somewhat unusual convention of `[y_min:y_max, x_min:x_max]` here - height comes before width.
 
 
 Let's take a closer look at the result:
