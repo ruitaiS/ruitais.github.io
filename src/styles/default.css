@@ -86,6 +86,14 @@ details summary {
 img.hero {
   max-width: 100%;
   display: block;
+  margin: 0 auto;
+}
+
+/*Same style as hero images; this is more for semantic seperation than anything else rn*/
+img.full_width {
+  max-width: 100%;
+  display: block;
+  margin: 0 auto;
 }
 
 .project-source {
