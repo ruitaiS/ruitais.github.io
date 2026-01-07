@@ -15,7 +15,7 @@ Let's take a closer look at the result:
 
 <img src="/images/vision-data/cropped_hud.png" alt="GT7 HUD Element" class="full_width">
 
-The steering angle is represented by a moving red dot placed above the RPM display, sweeping left to right in a circular arc to indicate the current steering input. To make the vision task a little easier, I painted the hood of the car matte black in-game - this way there's a reasonably consistent dark background against which to detect the dot.
+The steering angle is represented by a moving red dot placed above the RPM display, sweeping left to right in a circular arc to indicate the current steering input. To make the vision task a little easier, I painted the hood of the car matte black in-game - this way there's a reasonably consistent dark background against which to detect the dot, and we don't need to worry about reflections from the environment.
 
 We also need to further mask out other areas of the frame. Even though the hood of the car is black, the RPM gauge shows red for low RPMs, and the curbs on most tracks are also painted red and white. These red pixels show up in the cropped frame and introduce noise.
 
